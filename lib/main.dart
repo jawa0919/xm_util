@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,116 +8,371 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'XM Utility App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const UtilityHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class UtilityHomePage extends StatefulWidget {
+  const UtilityHomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<UtilityHomePage> createState() => _UtilityHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _UtilityHomePageState extends State<UtilityHomePage> {
+  // 计算器相关状态
+  String _calculatorDisplay = '0';
+  double _firstOperand = 0;
+  String _operation = '';
+  bool _shouldResetScreen = false;
 
-  void _incrementCounter() {
+  // 日期相关状态
+  String _currentDateTime = '';
+
+  // 天气相关状态
+  String _weatherCondition = '晴朗';
+  String _temperature = '25°C';
+  String _location = '北京市';
+
+  // 备忘录相关状态
+  TextEditingController _noteController = TextEditingController();
+  String _savedNote = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _updateDateTime();
+    // 设置定时器每分钟更新一次日期时间
+    Future.delayed(const Duration(minutes: 1), () {
+      if (mounted) {
+        _updateDateTime();
+      }
+    });
+  }
+
+  void _updateDateTime() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _currentDateTime = DateFormat(
+        'yyyy年MM月dd日 HH:mm:ss',
+      ).format(DateTime.now());
+    });
+  }
+
+  // 计算器功能
+  void _calculatorButtonPressed(String buttonText) {
+    setState(() {
+      if (buttonText == 'C') {
+        _calculatorDisplay = '0';
+        _firstOperand = 0;
+        _operation = '';
+        _shouldResetScreen = false;
+      } else if (buttonText == '+' ||
+          buttonText == '-' ||
+          buttonText == '×' ||
+          buttonText == '÷') {
+        _firstOperand = double.parse(_calculatorDisplay);
+        _operation = buttonText;
+        _shouldResetScreen = true;
+      } else if (buttonText == '=') {
+        double secondOperand = double.parse(_calculatorDisplay);
+        double result = 0;
+
+        switch (_operation) {
+          case '+':
+            result = _firstOperand + secondOperand;
+            break;
+          case '-':
+            result = _firstOperand - secondOperand;
+            break;
+          case '×':
+            result = _firstOperand * secondOperand;
+            break;
+          case '÷':
+            result = _firstOperand / secondOperand;
+            break;
+        }
+
+        _calculatorDisplay = result.toString();
+        if (_calculatorDisplay.endsWith('.0')) {
+          _calculatorDisplay = _calculatorDisplay.substring(
+            0,
+            _calculatorDisplay.length - 2,
+          );
+        }
+        _operation = '';
+        _shouldResetScreen = true;
+      } else {
+        if (_shouldResetScreen) {
+          _calculatorDisplay = buttonText;
+          _shouldResetScreen = false;
+        } else {
+          _calculatorDisplay = _calculatorDisplay == '0'
+              ? buttonText
+              : _calculatorDisplay + buttonText;
+        }
+      }
+    });
+  }
+
+  // 备忘录保存功能
+  void _saveNote() {
+    setState(() {
+      _savedNote = _noteController.text;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('XM 工具箱'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              // 日期和天气区域（上半部分）
+              Row(
+                children: [
+                  // 日期区块
+                  Expanded(
+                    child: Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '当前日期时间',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _currentDateTime,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // 天气区块
+                  Expanded(
+                    child: Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '天气信息',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _location,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                const Icon(Icons.wb_sunny, color: Colors.amber),
+                                const SizedBox(width: 4),
+                                Text(
+                                  _weatherCondition,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(width: 16),
+                                Text(
+                                  _temperature,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              // 计算器和备忘录区域（下半部分）
+              Expanded(
+                child: Row(
+                  children: [
+                    // 计算器区块
+                    Expanded(
+                      child: Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              const Text(
+                                '计算器',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Container(
+                                width: double.infinity,
+                                height: 60,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    _calculatorDisplay,
+                                    style: const TextStyle(fontSize: 24),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              // 计算器按钮
+                              GridView.count(
+                                crossAxisCount: 4,
+                                shrinkWrap: true,
+                                mainAxisSpacing: 4,
+                                crossAxisSpacing: 4,
+                                children: [
+                                  _buildCalculatorButton('7'),
+                                  _buildCalculatorButton('8'),
+                                  _buildCalculatorButton('9'),
+                                  _buildCalculatorButton('÷'),
+                                  _buildCalculatorButton('4'),
+                                  _buildCalculatorButton('5'),
+                                  _buildCalculatorButton('6'),
+                                  _buildCalculatorButton('×'),
+                                  _buildCalculatorButton('1'),
+                                  _buildCalculatorButton('2'),
+                                  _buildCalculatorButton('3'),
+                                  _buildCalculatorButton('-'),
+                                  _buildCalculatorButton('C'),
+                                  _buildCalculatorButton('0'),
+                                  _buildCalculatorButton('='),
+                                  _buildCalculatorButton('+'),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // 备忘录区块
+                    Expanded(
+                      child: Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              const Text(
+                                '本地备忘录',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              TextField(
+                                controller: _noteController,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: '输入备忘录内容...',
+                                ),
+                                maxLines: 4,
+                              ),
+                              const SizedBox(height: 8),
+                              ElevatedButton(
+                                onPressed: _saveNote,
+                                child: const Text('保存'),
+                              ),
+                              const SizedBox(height: 8),
+                              Expanded(
+                                child: Card(
+                                  elevation: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SingleChildScrollView(
+                                      child: Text(
+                                        _savedNote.isEmpty
+                                            ? '暂无保存的备忘录'
+                                            : _savedNote,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget _buildCalculatorButton(String buttonText) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsetsGeometry.zero,
+        backgroundColor:
+            buttonText == 'C' ||
+                buttonText == '=' ||
+                buttonText == '+' ||
+                buttonText == '-' ||
+                buttonText == '×' ||
+                buttonText == '÷'
+            ? Colors.deepPurple
+            : Colors.white,
+        foregroundColor:
+            buttonText == 'C' ||
+                buttonText == '=' ||
+                buttonText == '+' ||
+                buttonText == '-' ||
+                buttonText == '×' ||
+                buttonText == '÷'
+            ? Colors.white
+            : Colors.black,
+      ),
+      onPressed: () => _calculatorButtonPressed(buttonText),
+      child: Center(
+        child: Text(buttonText, style: const TextStyle(fontSize: 18)),
+      ),
     );
   }
 }
