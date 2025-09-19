@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- 背景正方形 -->
+  <rect x="10" y="10" width="180" height="180" fill="#f8f0ff"/>
+  
+  <!-- 主图形 - 紫色渐变背景 -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9333ea"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- X 字母 - 调整大小和位置 -->
+  <path d="M50 60 L80 130 M50 130 L80 60" stroke="url(#logoGradient)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- M 字母 - 调整大小和位置 -->
+  <path d="M100 60 L100 130 M100 60 L120 95 L140 60 L140 130" stroke="url(#logoGradient)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- 装饰元素 -->
+  <circle cx="150" cy="40" r="6" fill="#d8b4fe"/>
+  <circle cx="160" cy="60" r="4" fill="#d8b4fe"/>
+  <circle cx="140" cy="65" r="3" fill="#d8b4fe"/>
+  <circle cx="40" cy="140" r="5" fill="#d8b4fe"/>
+  <circle cx="55" cy="150" r="3" fill="#d8b4fe"/>
+  
+  <!-- 中心装饰点 -->
+  <circle cx="95" cy="95" r="4" fill="#ffffff"/>
+  
+  <!-- 文字：工具箱 - 调整位置 -->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#9333ea" text-anchor="middle">工具箱</text>
+</svg>
