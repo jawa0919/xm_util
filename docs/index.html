@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XM Utility App - 您的一站式手机工具箱</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1', // 紫色主题
+                        secondary: '#4F46E5',
+                        accent: '#EC4899',
+                        dark: '#1E293B',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-inter bg-gray-50 text-dark">
+    <!-- 导航栏 -->
+    <header class="bg-white shadow-sm fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center">
+                        <i class="fa fa-cube text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-semibold text-dark">XM Utility</span>
+                    </a>
+                </div>
+
+                <!-- 桌面导航 -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-gray-600 hover:text-primary font-medium">功能介绍</a>
+                    <a href="#calculator" class="text-gray-600 hover:text-primary font-medium">计算器</a>
+                    <a href="#date" class="text-gray-600 hover:text-primary font-medium">日期工具</a>
+                    <a href="#weather" class="text-gray-600 hover:text-primary font-medium">天气信息</a>
+                    <a href="#notes" class="text-gray-600 hover:text-primary font-medium">备忘录</a>
+                </nav>
+
+                <!-- 移动端菜单按钮 -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-600 hover:text-primary focus:outline-none">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="container mx-auto px-4 py-3 space-y-1">
+                <a href="#features" class="block py-2 text-gray-600 hover:text-primary font-medium">功能介绍</a>
+                <a href="#calculator" class="block py-2 text-gray-600 hover:text-primary font-medium">计算器</a>
+                <a href="#date" class="block py-2 text-gray-600 hover:text-primary font-medium">日期工具</a>
+                <a href="#weather" class="block py-2 text-gray-600 hover:text-primary font-medium">天气信息</a>
+                <a href="#notes" class="block py-2 text-gray-600 hover:text-primary font-medium">备忘录</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark leading-tight mb-4">
+                        XM Utility <span class="text-primary">工具箱</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8 max-w-lg">
+                        集成计算器、日期时间、天气预报和备忘录功能于一体的实用工具应用，让您的手机更加智能便捷。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#features"
+                            class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg shadow-md transition-all duration-300 flex items-center">
+                            <i class="fa fa-rocket mr-2"></i> 了解更多
+                        </a>
+                        <a href="https://flutter.dev" target="_blank"
+                            class="bg-white hover:bg-gray-50 text-primary border border-primary font-medium py-3 px-6 rounded-lg shadow-sm transition-all duration-300 flex items-center">
+                            <i class="fa fa-code mr-2"></i> Flutter 开发
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <!-- 应用预览图 -->
+                    <div class="relative w-full max-w-sm">
+                        <div
+                            class="relative z-10 bg-white rounded-3xl shadow-xl overflow-hidden border-8 border-dark transform rotate-2">
+                            <div class="bg-gray-800 h-6 flex justify-center items-center">
+                                <div class="w-24 h-1.5 bg-gray-700 rounded-full"></div>
+                            </div>
+                            <div class="aspect-[9/19.5] bg-gray-100">
+                                <!-- 模拟应用界面 -->
+                                <div class="bg-primary text-white p-2 text-xs text-center">XM Utility</div>
+                                <div class="p-2">
+                                    <!-- 日期时间模块 -->
+                                    <div class="bg-white rounded-lg shadow p-2 mb-2">
+                                        <div class="text-xs font-medium text-gray-500">当前日期时间</div>
+                                        <div class="text-sm">2023年12月12日 14:30:25</div>
+                                    </div>
+                                    <!-- 天气模块 -->
+                                    <div class="bg-white rounded-lg shadow p-2 mb-2">
+                                        <div class="text-xs font-medium text-gray-500">天气信息</div>
+                                        <div class="flex items-center text-sm">
+                                            <i class="fa fa-sun-o text-yellow-500 mr-1"></i> 晴朗 25°C
+                                        </div>
+                                    </div>
+                                    <!-- 计算器模块 -->
+                                    <div class="bg-white rounded-lg shadow p-2 mb-2">
+                                        <div class="text-xs font-medium text-gray-500">计算器</div>
+                                        <div class="bg-gray-100 p-1 rounded text-right text-sm mb-1">123+456=579</div>
+                                        <div class="grid grid-cols-4 gap-1">
+                                            <div class="bg-gray-200 rounded text-center py-1 text-xs">1</div>
+                                            <div class="bg-gray-200 rounded text-center py-1 text-xs">2</div>
+                                            <div class="bg-gray-200 rounded text-center py-1 text-xs">3</div>
+                                            <div class="bg-primary text-white rounded text-center py-1 text-xs">+</div>
+                                        </div>
+                                    </div>
+                                    <!-- 备忘录模块 -->
+                                    <div class="bg-white rounded-lg shadow p-2">
+                                        <div class="text-xs font-medium text-gray-500">备忘录</div>
+                                        <div class="text-xs text-gray-600 mt-1">今天下午三点开会</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 装饰元素 -->
+                        <div
+                            class="absolute -z-10 top-10 -right-6 w-full max-w-sm bg-gray-300 rounded-3xl transform -rotate-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能特点 -->
+    <section id="features" class="py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">实用功能，触手可及</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    XM Utility 集成了四种常用工具，满足您的日常需求，让生活更加便捷高效。
+                </p>
+            </div>
+
+            <!-- 功能卡片网格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 计算器卡片 -->
+                <div class="bg-white rounded-xl shadow-md p-6 card-hover" id="calculator">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-calculator text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">智能计算器</h3>
+                    <p class="text-gray-600">
+                        简洁易用的计算器，支持基本的加减乘除运算，满足您的日常计算需求。
+                    </p>
+                    <a href="#" class="text-primary font-medium inline-flex items-center mt-4 hover:underline">
+                        了解更多 <i class="fa fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+
+                <!-- 日期工具卡片 -->
+                <div class="bg-white rounded-xl shadow-md p-6 card-hover" id="date">
+                    <div class="w-14 h-14 bg-secondary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-calendar text-2xl text-secondary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">日期时间</h3>
+                    <p class="text-gray-600">
+                        实时显示当前日期和时间，精确到秒，让您随时掌握时间动态。
+                    </p>
+                    <a href="#" class="text-primary font-medium inline-flex items-center mt-4 hover:underline">
+                        了解更多 <i class="fa fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+
+                <!-- 天气信息卡片 -->
+                <div class="bg-white rounded-xl shadow-md p-6 card-hover" id="weather">
+                    <div class="w-14 h-14 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-cloud text-2xl text-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">天气预报</h3>
+                    <p class="text-gray-600">
+                        显示当前天气状况和温度，帮助您合理安排出行计划。
+                    </p>
+                    <a href="#" class="text-primary font-medium inline-flex items-center mt-4 hover:underline">
+                        了解更多 <i class="fa fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+
+                <!-- 备忘录卡片 -->
+                <div class="bg-white rounded-xl shadow-md p-6 card-hover" id="notes">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-sticky-note text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">本地备忘录</h3>
+                    <p class="text-gray-600">
+                        快速记录和保存重要信息，随时查看您的备忘录内容。
+                    </p>
+                    <a href="#" class="text-primary font-medium inline-flex items-center mt-4 hover:underline">
+                        了解更多 <i class="fa fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能详情区域 -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 计算器功能详情 -->
+            <div class="flex flex-col lg:flex-row items-center mb-20 gap-10">
+                <div class="lg:w-1/2 order-2 lg:order-1">
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark mb-4">智能计算器</h2>
+                    <p class="text-gray-600 mb-6">
+                        XM Utility 的计算器功能简洁高效，支持基本的数学运算，包括加法、减法、乘法和除法。
+                        界面直观易用，适合日常各种计算场景使用。
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">简洁明了的用户界面，操作流畅</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">支持连续计算，快速得到结果</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">一键清除功能，方便重新计算</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lg:w-1/2 order-1 lg:order-2 flex justify-center">
+                    <div class="bg-white p-4 rounded-xl shadow-lg w-full max-w-md">
+                        <div class="bg-gray-100 p-4 rounded-lg mb-4 text-right text-2xl font-medium">
+                            12345
+                        </div>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">7</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">8</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">9</button>
+                            <button
+                                class="bg-primary text-white hover:bg-primary/90 py-3 rounded-lg font-medium">÷</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">4</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">5</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">6</button>
+                            <button
+                                class="bg-primary text-white hover:bg-primary/90 py-3 rounded-lg font-medium">×</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">1</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">2</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">3</button>
+                            <button
+                                class="bg-primary text-white hover:bg-primary/90 py-3 rounded-lg font-medium">-</button>
+                            <button
+                                class="bg-red-500 text-white hover:bg-red-600 py-3 rounded-lg font-medium">C</button>
+                            <button class="bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium">0</button>
+                            <button
+                                class="bg-green-500 text-white hover:bg-green-600 py-3 rounded-lg font-medium">=</button>
+                            <button
+                                class="bg-primary text-white hover:bg-primary/90 py-3 rounded-lg font-medium">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 日期时间功能详情 -->
+            <div class="flex flex-col lg:flex-row items-center mb-20 gap-10">
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+                        <h3 class="text-xl font-semibold mb-4 text-center">当前日期时间</h3>
+                        <div class="text-center">
+                            <div id="date-display" class="text-2xl font-bold text-primary mb-2">2023年12月12日</div>
+                            <div id="time-display" class="text-3xl font-mono">14:30:25</div>
+                        </div>
+                        <div class="mt-6 grid grid-cols-7 gap-1 text-center text-xs">
+                            <div class="text-gray-500">日</div>
+                            <div class="text-gray-500">一</div>
+                            <div class="text-gray-500">二</div>
+                            <div class="text-gray-500">三</div>
+                            <div class="text-gray-500">四</div>
+                            <div class="text-gray-500">五</div>
+                            <div class="text-gray-500">六</div>
+                            <div class="py-1">26</div>
+                            <div class="py-1">27</div>
+                            <div class="py-1">28</div>
+                            <div class="py-1">29</div>
+                            <div class="py-1">30</div>
+                            <div class="py-1">1</div>
+                            <div class="py-1">2</div>
+                            <div class="py-1">3</div>
+                            <div class="py-1">4</div>
+                            <div class="py-1">5</div>
+                            <div class="py-1">6</div>
+                            <div class="py-1">7</div>
+                            <div class="py-1">8</div>
+                            <div class="py-1">9</div>
+                            <div class="py-1">10</div>
+                            <div class="py-1">11</div>
+                            <div class="py-1 bg-primary text-white rounded">12</div>
+                            <div class="py-1">13</div>
+                            <div class="py-1">14</div>
+                            <div class="py-1">15</div>
+                            <div class="py-1">16</div>
+                            <div class="py-1">17</div>
+                            <div class="py-1">18</div>
+                            <div class="py-1">19</div>
+                            <div class="py-1">20</div>
+                            <div class="py-1">21</div>
+                            <div class="py-1">22</div>
+                            <div class="py-1">23</div>
+                            <div class="py-1">24</div>
+                            <div class="py-1">25</div>
+                            <div class="py-1">26</div>
+                            <div class="py-1">27</div>
+                            <div class="py-1">28</div>
+                            <div class="py-1">29</div>
+                            <div class="py-1">30</div>
+                            <div class="py-1">31</div>
+                            <div class="py-1">1</div>
+                            <div class="py-1">2</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark mb-4">实时日期时间</h2>
+                    <p class="text-gray-600 mb-6">
+                        XM Utility 提供精准的日期和时间显示功能，实时更新，让您随时掌握当前时间。
+                        还包含日历视图，方便您查看当月日期。
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">精确到秒的时间显示，自动更新</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">清晰的日期格式，便于阅读</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">简洁的日历视图，直观展示当月日期</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 天气信息功能详情 -->
+            <div class="flex flex-col lg:flex-row items-center mb-20 gap-10">
+                <div class="lg:w-1/2 order-2 lg:order-1">
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark mb-4">天气预报</h2>
+                    <p class="text-gray-600 mb-6">
+                        XM Utility 提供当前天气信息显示功能，包括天气状况和温度，让您出门前了解天气情况，合理安排行程。
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">实时显示当前天气状况</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">精确的温度显示</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">直观的天气图标，一目了然</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lg:w-1/2 order-1 lg:order-2 flex justify-center">
+                    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+                        <h3 class="text-xl font-semibold mb-4 text-center">天气信息</h3>
+                        <div class="text-center">
+                            <div class="text-xl mb-2">北京市</div>
+                            <div class="flex items-center justify-center mb-4">
+                                <i class="fa fa-sun-o text-5xl text-yellow-500 mr-4"></i>
+                                <div>
+                                    <div class="text-4xl font-bold">25°C</div>
+                                    <div class="text-xl text-gray-600">晴朗</div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div class="bg-gray-50 p-3 rounded-lg">
+                                    <div class="text-sm text-gray-500">湿度</div>
+                                    <div class="font-medium">45%</div>
+                                </div>
+                                <div class="bg-gray-50 p-3 rounded-lg">
+                                    <div class="text-sm text-gray-500">风力</div>
+                                    <div class="font-medium">3级</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 备忘录功能详情 -->
+            <div class="flex flex-col lg:flex-row items-center gap-10">
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+                        <h3 class="text-xl font-semibold mb-4 text-center">本地备忘录</h3>
+                        <div class="mb-4">
+                            <textarea class="w-full p-3 border border-gray-300 rounded-lg h-32"
+                                placeholder="输入备忘录内容..."></textarea>
+                            <button
+                                class="mt-2 bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-colors w-full">保存</button>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="text-sm text-gray-500 mb-2">已保存的备忘录</div>
+                            <div class="text-gray-700">今天下午三点开会讨论项目进度</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark mb-4">本地备忘录</h2>
+                    <p class="text-gray-600 mb-6">
+                        XM Utility 的备忘录功能让您可以随时记录重要信息，方便快捷地保存和查看您的笔记内容。
+                        所有数据保存在本地，安全可靠。
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">简单易用的文本编辑功能</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">一键保存，快速记录重要信息</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">本地存储，数据安全可靠</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 下载区域 -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">立即体验 XM Utility</h2>
+                <p class="text-lg text-white/90 max-w-2xl mx-auto">
+                    下载并安装 XM Utility 应用，享受便捷的工具集成体验，让您的手机更加智能高效。
+                </p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="#"
+                    class="bg-white text-primary hover:bg-gray-100 font-medium py-3 px-6 rounded-lg shadow-md transition-all duration-300 flex items-center">
+                    <i class="fa fa-apple text-2xl mr-2"></i>
+                    <div class="text-left">
+                        <div class="text-xs">下载</div>
+                        <div class="text-sm font-semibold">App Store</div>
+                    </div>
+                </a>
+
+                <a href="#"
+                    class="bg-white text-primary hover:bg-gray-100 font-medium py-3 px-6 rounded-lg shadow-md transition-all duration-300 flex items-center">
+                    <i class="fa fa-android text-2xl mr-2"></i>
+                    <div class="text-left">
+                        <div class="text-xs">下载</div>
+                        <div class="text-sm font-semibold">Google Play</div>
+                    </div>
+                </a>
+
+                <a href="#"
+                    class="bg-white text-primary hover:bg-gray-100 font-medium py-3 px-6 rounded-lg shadow-md transition-all duration-300 flex items-center">
+                    <i class="fa fa-desktop text-2xl mr-2"></i>
+                    <div class="text-left">
+                        <div class="text-xs">下载</div>
+                        <div class="text-sm font-semibold">桌面版</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fa fa-cube text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-semibold">XM Utility</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        集成计算器、日期时间、天气预报和备忘录功能于一体的实用工具应用。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i
+                                class="fa fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i
+                                class="fa fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i
+                                class="fa fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i
+                                class="fa fa-github"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">功能</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#calculator" class="text-gray-400 hover:text-primary transition-colors">计算器</a>
+                        </li>
+                        <li><a href="#date" class="text-gray-400 hover:text-primary transition-colors">日期时间</a></li>
+                        <li><a href="#weather" class="text-gray-400 hover:text-primary transition-colors">天气信息</a></li>
+                        <li><a href="#notes" class="text-gray-400 hover:text-primary transition-colors">本地备忘录</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">关于我们</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">公司简介</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">团队成员</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">联系我们</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">加入我们</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">支持</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">帮助中心</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">常见问题</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">隐私政策</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">使用条款</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2025 XM Utility. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('bg-white/95', 'backdrop-blur-sm');
+                navbar.classList.remove('bg-white');
+            } else {
+                navbar.classList.remove('bg-white/95', 'backdrop-blur-sm');
+                navbar.classList.add('bg-white');
+            }
+        });
+
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // 关闭移动菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // 实时时钟
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('time-display').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // 初始化时钟
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // 格式化当前日期
+        function formatCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            document.getElementById('date-display').textContent = `${year}年${month}月${day}日`;
+        }
+
+        // 初始化日期
+        formatCurrentDate();
+    </script>
+</body>
+
+</html>
