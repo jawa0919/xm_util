@@ -1,0 +1,13 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "WJW2C328V2.top.meu6jia.xmUtil",
+                "paths": [
+                    "/xm_util_start/*"
+                ]
+            }
+        ]
+    }
+}

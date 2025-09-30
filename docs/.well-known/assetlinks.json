@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "top.meu6jia.xm_util",
+            "sha256_cert_fingerprints": [
+                "41:E0:67:DB:E8:A3:81:65:21:97:CB:DC:46:35:A9:3A:BD:45:FF:9E:EB:B4:C5:39:9D:5A:C1:39:A6:05:0B:E3"
+            ]
+        }
+    }
+]

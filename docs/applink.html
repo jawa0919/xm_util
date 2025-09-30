@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Link</title>
+</head>
+
+<body>
+    <h3>Android</h3>
+    <h4>App Link</h4>
+    <p><a href="https://fdad2bb394bd.ngrok-free.app/xm_util_start?t=applink" target="_blank">app_start1</a></p>
+    <p id="app-link" style="color: blue;cursor: pointer;">app_start2</p>
+    <h4>Deep Link</h4>
+    <p><a href="xmutil://top.meu6jia/xm_util_start?t=deeplink" target="_blank">app_start3</a></p>
+    <p id="deep-link" style="color: blue;cursor: pointer;">app_start4</p>
+    <h3>iOS</h3>
+    <h4>Universal Links</h4>
+    <p><a href="https://fdad2bb394bd.ngrok-free.app/xm_util_start?t=universallink" target="_blank">app_start5</a></p>
+    <p id="universal-link" style="color: blue;cursor: pointer;">app_start6</p>
+    <h4>Custom URL schemes</h4>
+    <p><a href="xmutil://top.meu6jia/xm_util_start?t=customscheme" target="_blank">app_start7</a></p>
+    <p id="custom-scheme-link" style="color: blue;cursor: pointer;">app_start8</p>
+    <script>
+        const appLink = document.getElementById('app-link');
+        appLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open("https://fdad2bb394bd.ngrok-free.app/xm_util_start?t=applink", "_blank");
+        })
+        const deepLink = document.getElementById('deep-link');
+        deepLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open("xmutil://top.meu6jia/xm_util_start?t=deeplink", "_blank");
+        })
+        const universalLink = document.getElementById('universal-link');
+        universalLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open("https://fdad2bb394bd.ngrok-free.app/xm_util_start?t=universallink", "_blank");
+        })
+        const customSchemeLink = document.getElementById('custom-scheme-link');
+        customSchemeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open("xmutil://top.meu6jia/xm_util_start?t=customscheme", "_blank");
+        })
+    </script>
+</body>
+
+</html>
